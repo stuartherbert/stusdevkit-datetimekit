@@ -148,7 +148,7 @@ class When extends DateTimeImmutable
     {
         $input ??= microtime(true);
 
-        return new static("@" . (string) $input);
+        return new static("@" . sprintf('%.6f', $input));
     }
 
     /**
