@@ -225,7 +225,7 @@ class When extends DateTimeImmutable
      */
     public function asFilesystemFriendlyDate(): string
     {
-        return $this->format('Ymd');
+        return $this->format('Y-m-d');
     }
 
     /**
@@ -361,8 +361,8 @@ class When extends DateTimeImmutable
 
         return $this->setDate(
             $when->getYear(),
-            $this->getMonthOfYear(),
-            $this->getDayOfMonth(),
+            $when->getMonthOfYear(),
+            $when->getDayOfMonth(),
         );
     }
 
@@ -526,7 +526,7 @@ class When extends DateTimeImmutable
     #[NoDiscard]
     public function withMicroseconds(int $microseconds): static
     {
-        return $this->withTime(microseconds: $this->getMicroseconds());
+        return $this->withTime(microseconds: $microseconds);
     }
 
     // ----------------------------------------------------------------
