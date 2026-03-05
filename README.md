@@ -129,7 +129,7 @@ $timestamp = Now::asUnixTimestamp();  // int
 $dateTime  = Now::asDateTimeImmutable(); // returns new DateTimeImmutable instance
 
 // format for different domains via asFormat()
-$dbField   = Now::asFormat()->database()->postgres();   // "2026-03-05T14:30:00+00:00"
+$dbField   = Now::asFormat()->database()->postgres();    // "2026-03-05T14:30:00+00:00"
 $httpDate  = Now::asFormat()->http()->rfc9110();         // "Thu, 05 Mar 2026 14:30:00 GMT"
 $fileDate  = Now::asFormat()->filesystem()->date();      // "2026-03-05"
 
