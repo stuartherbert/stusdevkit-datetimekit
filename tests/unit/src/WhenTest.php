@@ -581,7 +581,7 @@ class WhenTest extends TestCase
         // explain your test
 
         // this test proves that asFilesystemFriendlyDate() returns the
-        // datetime in YYYYMMDD format
+        // datetime in YYYY-MM-DD format
 
         // ----------------------------------------------------------------
         // setup your test

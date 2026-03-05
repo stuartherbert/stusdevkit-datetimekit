@@ -42,6 +42,7 @@ declare(strict_types=1);
 namespace StusDevKit\DateTimeKit;
 
 use DateInterval;
+use DateMalformedStringException;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
@@ -80,7 +81,7 @@ class When extends DateTimeImmutable
      * - does not clone any instance of `When` that's passed in; you
      *   get the same object returned (handy if you're using this to
      *   wrap a DateTimeInterface that _might_ already be a `When` object)
-     * - does not support millisecond (aka realtime) precision. Use the
+     * - does not support microsecond (aka realtime) precision. Use the
      *   `::fromRealtime()` static constructor for that.
      */
     #[NoDiscard]
@@ -111,7 +112,7 @@ class When extends DateTimeImmutable
      * - does not clone any instance of `When` that's passed in; you
      *   get the same object returned (handy if you're using this to
      *   wrap a DateTimeInterface that _might_ already be a `When` object)
-     * - does not support millisecond (aka realtime) precision. Use the
+     * - does not support microsecond (aka realtime) precision. Use the
      *   `::fromRealtime()` static constructor for that.
      */
     #[NoDiscard]
@@ -134,16 +135,22 @@ class When extends DateTimeImmutable
 
     /**
      * Builds a new instance, using the given datetime information.
+     *
+     * Preserves microsecond precision from the input.
      */
     #[NoDiscard]
     public static function fromDateTimeInterface(DateTimeInterface $input): static
     {
-        return new static($input->format(DateTimeInterface::ATOM));
+        return new static($input->format('Y-m-d H:i:s.u P'));
     }
 
     /**
      * Builds a new instance with microsecond precision.
+     *
+     * When called without an argument (or with `null`), captures
+     * the current time with microsecond precision.
      */
+    #[NoDiscard]
     public static function fromRealtime(?float $input = null): static
     {
         $input ??= microtime(true);
@@ -243,7 +250,7 @@ class When extends DateTimeImmutable
     }
 
     /**
-     * Returns year,month,day,hours,minutes,seconds,microseconds in
+     * Returns year,month,day,hours,minutes,seconds,milliseconds in
      * `YYYYMMDD-HHMMSS-MS` format.
      *
      * Useful for creating filenames on your filesystem.
@@ -608,9 +615,9 @@ class When extends DateTimeImmutable
     // ----------------------------------------------------------------
 
     /**
-     * (PHP 5 &gt;=5.5.0)<br/>
-     * Adds an amount of days, months, years, hours, minutes and seconds.
-     * Convenience wrapper around `DateTimeImmutable::add()`.
+     * Adds an amount of days, months, years, hours, minutes
+     * and seconds. Convenience wrapper around
+     * `DateTimeImmutable::add()`.
      *
      * @link https://secure.php.net/manual/en/datetimeimmutable.add.php
      */
@@ -622,15 +629,19 @@ class When extends DateTimeImmutable
     }
 
     /**
-     * (PHP 8 &gt;=8.3.0)<br/>
-     * Alters the timestamp. Convenience wrapper around `DateTimeImmutable::modify()`.
+     * Alters the timestamp. Convenience wrapper around
+     * `DateTimeImmutable::modify()`.
      *
      * @link https://secure.php.net/manual/en/datetimeimmutable.modify.php
      *
-     * @param string $modifier <p>A date/time string. Valid formats are explained in
-     * {@link https://secure.php.net/manual/en/datetime.formats.php Date and Time Formats}.</p>
-     * @return static Returns the newly created object or false on failure.
-     * Returns the {@link https://secure.php.net/manual/en/class.datetimeimmutable.php DateTimeImmutable} object for method chaining or <b>FALSE</b> on failure.
+     * @param string $modifier A date/time string. Valid formats
+     *     are explained in {@link https://secure.php.net/manual/en/datetime.formats.php Date and Time Formats}.
+     * @return static
+     *
+     * @throws DateMalformedStringException if the modifier string
+     *     is not a valid datetime format.
+     * @throws InvalidArgumentException if the modifier is
+     *     syntactically valid but produces a false result.
      */
     #[NoDiscard]
     #[Override]
@@ -645,16 +656,10 @@ class When extends DateTimeImmutable
     }
 
     /**
-     * (PHP 5 &gt;=5.5.0)<br/>
-     * Sets the date
+     * Sets the date. Convenience wrapper around
+     * `DateTimeImmutable::setDate()`.
      *
      * @link https://secure.php.net/manual/en/datetimeimmutable.setdate.php
-     *
-     * @param int $year <p>Year of the date.</p>
-     * @param int $month <p>Month of the date.</p>
-     * @param int $day <p>Day of the date.</p>
-     * @return static
-     * Returns the {@link https://secure.php.net/manual/en/class.datetimeimmutable.php DateTimeImmutable} object for method chaining or <b>FALSE</b> on failure.
      */
     #[NoDiscard]
     #[Override]
@@ -664,16 +669,10 @@ class When extends DateTimeImmutable
     }
 
     /**
-     * (PHP 5 &gt;=5.5.0)<br/>
-     * Sets the ISO date
+     * Sets the ISO date. Convenience wrapper around
+     * `DateTimeImmutable::setISODate()`.
      *
      * @link https://php.net/manual/en/class.datetimeimmutable.php
-     *
-     * @param int $year <p>Year of the date.</p>
-     * @param int $week <p>Week of the date.</p>
-     * @param int $dayOfWeek [optional] <p>Offset from the first day of the week.</p>
-     * @return static
-     * Returns the {@link https://secure.php.net/manual/en/class.datetimeimmutable.php DateTimeImmutable} object for method chaining or <b>FALSE</b> on failure.
      */
     #[NoDiscard]
     #[Override]
@@ -683,17 +682,10 @@ class When extends DateTimeImmutable
     }
 
     /**
-     * (PHP 5 &gt;=5.5.0)<br/>
-     * Sets the time
+     * Sets the time. Convenience wrapper around
+     * `DateTimeImmutable::setTime()`.
      *
      * @link https://secure.php.net/manual/en/datetimeimmutable.settime.php
-     *
-     * @param int $hour <p> Hour of the time. </p>
-     * @param int $minute <p> Minute of the time. </p>
-     * @param int $second [optional] <p> Second of the time. </p>
-     * @param int $microsecond [optional] <p> Microseconds of the time. Added since 7.1</p>
-     * @return static
-     * Returns the {@link https://secure.php.net/manual/en/class.datetimeimmutable.php DateTimeImmutable} object for method chaining or <b>FALSE</b> on failure.
      */
     #[NoDiscard]
     #[Override]
@@ -703,14 +695,11 @@ class When extends DateTimeImmutable
     }
 
     /**
-     * (PHP 5 &gt;=5.5.0)<br/>
-     * Sets the date and time based on an Unix timestamp
+     * Sets the date and time based on a Unix timestamp.
+     * Convenience wrapper around
+     * `DateTimeImmutable::setTimestamp()`.
      *
      * @link https://secure.php.net/manual/en/datetimeimmutable.settimestamp.php
-     *
-     * @param int $timestamp <p>Unix timestamp representing the date.</p>
-     * @return static
-     * Returns the {@link https://secure.php.net/manual/en/class.datetimeimmutable.php DateTimeImmutable} object for method chaining or <b>FALSE</b> on failure.
      */
     #[NoDiscard]
     #[Override]
@@ -720,17 +709,10 @@ class When extends DateTimeImmutable
     }
 
     /**
-     * (PHP 5 &gt;=5.5.0)<br/>
-     * Sets the time zone
+     * Sets the time zone. Convenience wrapper around
+     * `DateTimeImmutable::setTimezone()`.
      *
      * @link https://secure.php.net/manual/en/datetimeimmutable.settimezone.php
-     *
-     * @param DateTimeZone $timezone <p>
-     * A {@link https://secure.php.net/manual/en/class.datetimezone.php DateTimeZone} object representing the
-     * desired time zone.
-     * </p>
-     * @return static
-     * Returns the {@link https://secure.php.net/manual/en/class.datetimeimmutable.php DateTimeImmutable} object for method chaining or <b>FALSE</b> on failure.
      */
     #[NoDiscard]
     #[Override]
@@ -740,17 +722,11 @@ class When extends DateTimeImmutable
     }
 
     /**
-     * (PHP 5 &gt;=5.5.0)<br/>
-     * Subtracts an amount of days, months, years, hours, minutes and seconds
-     * Convenience wrapper around `DateTimeImmutable::sub()`.
+     * Subtracts an amount of days, months, years, hours,
+     * minutes and seconds. Convenience wrapper around
+     * `DateTimeImmutable::sub()`.
      *
      * @link https://secure.php.net/manual/en/datetimeimmutable.sub.php
-     *
-     * @param DateInterval $interval <p>
-     * A {@link https://secure.php.net/manual/en/class.dateinterval.php DateInterval} object
-     * </p>
-     * @return static
-     * Returns the {@link https://secure.php.net/manual/en/class.datetimeimmutable.php DateTimeImmutable} object for method chaining or <b>FALSE</b> on failure.
      */
     #[NoDiscard]
     #[Override]

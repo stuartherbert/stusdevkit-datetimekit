@@ -153,7 +153,7 @@ class Now
      * Repeated calls to this method with `null` parameter will return the
      * exact same value.
      */
-    public static function or(DateTimeInterface|string|int|null $input): ?When
+    public static function or(DateTimeInterface|string|int|null $input): When
     {
         if ($input === null) {
             return static::$cachedDateTime;
