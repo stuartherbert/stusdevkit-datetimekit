@@ -1,0 +1,37 @@
+{
+    "name": "stusdevkit/datetimekit",
+    "description": "Now and When support",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "autoload": {
+        "psr-4": {
+            "StusDevKit\\DateTimeKit\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "StusDevKit\\DateTimeKit\\Tests\\Unit\\": "tests/unit/src",
+            "StusDevKit\\DateTimeKit\\TestFixtures\\": "tests/fixtures/src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Stuart Herbert",
+            "email": "stuart@stuartherbert.com"
+        }
+    ],
+    "require": {
+        "ramsey/uuid": "^4.9"
+    },
+    "require-dev": {
+        "laminas/laminas-coding-standard": "^3.1",
+        "phpstan/phpstan": "^2.1.38",
+        "phpunit/phpunit": "^13.0",
+        "roave/security-advisories": "dev-latest"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
