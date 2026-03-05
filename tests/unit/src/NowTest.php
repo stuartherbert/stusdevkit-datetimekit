@@ -257,16 +257,16 @@ class NowTest extends TestCase
     }
 
     // ----------------------------------------------------------------
-    // asDateTimeInterface()
+    // asDateTimeImmutable()
 
-    #[TestDox('::asDateTimeInterface() returns a DateTimeInterface')]
-    public function test_asDateTimeInterface_returns_datetime_interface(): void
+    #[TestDox('::asDateTimeImmutable() returns a DateTimeImmutable')]
+    public function test_asDateTimeImmutable_returns_datetime_immutable(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that asDateTimeInterface() returns a
-        // DateTimeInterface instance
+        // this test proves that asDateTimeImmutable() returns a
+        // DateTimeImmutable instance (not a When)
 
         // ----------------------------------------------------------------
         // setup your test
@@ -276,22 +276,23 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = Now::asDateTimeInterface();
+        $result = Now::asDateTimeImmutable();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(DateTimeInterface::class, $result);
+        $this->assertInstanceOf(DateTimeImmutable::class, $result);
+        $this->assertNotInstanceOf(When::class, $result);
     }
 
-    #[TestDox('::asDateTimeInterface() returns the same value on repeated calls')]
-    public function test_asDateTimeInterface_returns_same_value_on_repeated_calls(): void
+    #[TestDox('::asDateTimeImmutable() returns the same datetime value as Now')]
+    public function test_asDateTimeImmutable_returns_same_datetime_value(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that repeated calls to
-        // asDateTimeInterface() return the exact same object
+        // this test proves that asDateTimeImmutable() returns a
+        // DateTimeImmutable with the same datetime value as Now
 
         // ----------------------------------------------------------------
         // setup your test
@@ -301,13 +302,42 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $result1 = Now::asDateTimeInterface();
-        $result2 = Now::asDateTimeInterface();
+        $result = Now::asDateTimeImmutable();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertSame($result1, $result2);
+        $this->assertEquals(
+            Now::now()->format('Y-m-d H:i:s.u'),
+            $result->format('Y-m-d H:i:s.u'),
+        );
+    }
+
+    #[TestDox('::asDateTimeImmutable() returns a new instance on each call')]
+    public function test_asDateTimeImmutable_returns_new_instance_on_each_call(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that each call to asDateTimeImmutable()
+        // returns a new DateTimeImmutable instance
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        Now::setTestClock('2025-06-15 10:30:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result1 = Now::asDateTimeImmutable();
+        $result2 = Now::asDateTimeImmutable();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertNotSame($result1, $result2);
+        $this->assertEquals($result1, $result2);
     }
 
     // ----------------------------------------------------------------

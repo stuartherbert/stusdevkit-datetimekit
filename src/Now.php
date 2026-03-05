@@ -42,6 +42,7 @@ declare(strict_types=1);
 namespace StusDevKit\DateTimeKit;
 
 use DateInterval;
+use DateTimeImmutable;
 use DateTimeInterface;
 use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
 
@@ -118,16 +119,19 @@ class Now
     }
 
     /**
-     * Converts to a `DateTimeInterface`.
+     * Converts to a `DateTimeImmutable`.
      *
-     * Added for testing scenarios where you deliberately want to shed
-     * the extra methods that `When` adds.
+     * Useful in testing scenarios where you deliberately want
+     * to shed the extra methods that `When` adds.
      *
-     * Repeated calls to this method will return the exact same value.
+     * Each call returns a new `DateTimeImmutable` instance.
      */
-    public static function asDateTimeInterface(): DateTimeInterface
+    public static function asDateTimeImmutable(): DateTimeImmutable
     {
-        return static::$cachedDateTime;
+        return new DateTimeImmutable(
+            datetime: static::$cachedDateTime->format('Y-m-d H:i:s.u'),
+            timezone: static::$cachedDateTime->getTimezone(),
+        );
     }
 
     /**
