@@ -41,18 +41,19 @@ declare(strict_types=1);
 
 namespace StusDevKit\DateTimeKit\Formatters;
 
+use DateTimeInterface;
+use DateTimeZone;
 use NoDiscard;
 use StusDevKit\DateTimeKit\When;
 
 /**
- * Routes `When` formatting to domain-specific formatters.
+ * Formats a `When` for use in HTTP headers.
  *
  * Usage:
  *
- *     $when->asFormat()->filesystem()->date();
- *     $when->asFormat()->database()->postgres();
+ *     $when->asFormat()->http()->rfc9110();
  */
-class WhenFormatter
+class WhenHttpFormatter
 {
     public function __construct(
         private readonly When $when,
@@ -60,42 +61,22 @@ class WhenFormatter
     }
 
     /**
-     * Returns the filesystem-friendly formatter.
+     * Formats as an RFC 9110 HTTP date.
      *
-     * Usage:
+     * This is the preferred format for HTTP headers such as
+     * `Date`, `Last-Modified`, and `Expires`.
      *
-     *     $when->asFormat()->filesystem()->date();
-     *     $when->asFormat()->filesystem()->dateTime();
+     * Example output: `Sun, 06 Nov 1994 08:49:37 GMT`
+     *
+     * RFC 9110 (which supersedes RFC 7231) requires the date
+     * to be in GMT (UTC). The format is identical to
+     * RFC 5322's IMF-fixdate.
      */
     #[NoDiscard]
-    public function filesystem(): WhenFilesystemFormatter
+    public function rfc9110(): string
     {
-        return new WhenFilesystemFormatter($this->when);
-    }
-
-    /**
-     * Returns the database formatter.
-     *
-     * Usage:
-     *
-     *     $when->asFormat()->database()->postgres();
-     */
-    #[NoDiscard]
-    public function database(): WhenDatabaseFormatter
-    {
-        return new WhenDatabaseFormatter($this->when);
-    }
-
-    /**
-     * Returns the HTTP header formatter.
-     *
-     * Usage:
-     *
-     *     $when->asFormat()->http()->rfc9110();
-     */
-    #[NoDiscard]
-    public function http(): WhenHttpFormatter
-    {
-        return new WhenHttpFormatter($this->when);
+        return $this->when
+            ->setTimezone(new DateTimeZone('GMT'))
+            ->format(DateTimeInterface::RFC7231);
     }
 }

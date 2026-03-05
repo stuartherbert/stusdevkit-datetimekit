@@ -46,89 +46,60 @@ namespace StusDevKit\DateTimeKit\Tests\Unit;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use StusDevKit\DateTimeKit\When;
-use StusDevKit\DateTimeKit\Formatters\WhenDatabaseFormatter;
-use StusDevKit\DateTimeKit\Formatters\WhenFilesystemFormatter;
-use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
 use StusDevKit\DateTimeKit\Formatters\WhenHttpFormatter;
 
-#[TestDox('WhenFormatter')]
-class WhenFormatterTest extends TestCase
+#[TestDox('WhenHttpFormatter')]
+class WhenHttpFormatterTest extends TestCase
 {
-    #[TestDox('->filesystem() returns a WhenFilesystemFormatter')]
-    public function test_filesystem_returns_filesystem_formatter(): void
+    #[TestDox('->rfc9110() returns the datetime in RFC 9110 format')]
+    public function test_rfc9110_returns_http_date_format(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that filesystem() returns a
-        // WhenFilesystemFormatter instance
+        // this test proves that rfc9110() returns the datetime
+        // in RFC 9110 HTTP date format, always in GMT
 
         // ----------------------------------------------------------------
         // setup your test
 
-        $when = new When('2025-06-15 10:30:45');
-        $unit = new WhenFormatter($when);
+        $when = new When('2025-06-15 10:30:45+00:00');
+        $unit = new WhenHttpFormatter($when);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = $unit->filesystem();
+        $result = $unit->rfc9110();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(WhenFilesystemFormatter::class, $result);
+        $this->assertSame('Sun, 15 Jun 2025 10:30:45 GMT', $result);
     }
 
-    #[TestDox('->database() returns a WhenDatabaseFormatter')]
-    public function test_database_returns_database_formatter(): void
+    #[TestDox('->rfc9110() converts non-UTC times to GMT')]
+    public function test_rfc9110_converts_to_gmt(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that database() returns a
-        // WhenDatabaseFormatter instance
+        // this test proves that rfc9110() converts the datetime
+        // to GMT regardless of the original timezone
 
         // ----------------------------------------------------------------
         // setup your test
 
-        $when = new When('2025-06-15 10:30:45');
-        $unit = new WhenFormatter($when);
+        $when = new When('2025-06-15 12:30:45+02:00');
+        $unit = new WhenHttpFormatter($when);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = $unit->database();
+        $result = $unit->rfc9110();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(WhenDatabaseFormatter::class, $result);
-    }
-
-    #[TestDox('->http() returns a WhenHttpFormatter')]
-    public function test_http_returns_http_formatter(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that http() returns a
-        // WhenHttpFormatter instance
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $when = new When('2025-06-15 10:30:45');
-        $unit = new WhenFormatter($when);
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result = $unit->http();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertInstanceOf(WhenHttpFormatter::class, $result);
+        $this->assertSame('Sun, 15 Jun 2025 10:30:45 GMT', $result);
     }
 }
