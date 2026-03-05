@@ -49,9 +49,11 @@ use DateTimeImmutable;
 use DateTimeZone;
 use DateMalformedStringException;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use StusDevKit\DateTimeKit\When;
 
+#[TestDox('When')]
 class WhenTest extends TestCase
 {
     // ================================================================
@@ -60,6 +62,7 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
+    #[TestDox('can be instantiated')]
     public function test_can_instantiate(): void
     {
         // ----------------------------------------------------------------
@@ -88,6 +91,7 @@ class WhenTest extends TestCase
     // ----------------------------------------------------------------
     // maybeFrom()
 
+    #[TestDox('::maybeFrom() returns null when given null')]
     public function test_maybeFrom_returns_null_when_given_null(): void
     {
         // ----------------------------------------------------------------
@@ -111,6 +115,7 @@ class WhenTest extends TestCase
         $this->assertNull($result);
     }
 
+    #[TestDox('::maybeFrom() creates a When from a string')]
     public function test_maybeFrom_returns_when_from_string(): void
     {
         // ----------------------------------------------------------------
@@ -137,6 +142,7 @@ class WhenTest extends TestCase
         $this->assertSame(15, $result->getDayOfMonth());
     }
 
+    #[TestDox('::maybeFrom() creates a When from a UNIX timestamp')]
     public function test_maybeFrom_returns_when_from_int(): void
     {
         // ----------------------------------------------------------------
@@ -162,6 +168,7 @@ class WhenTest extends TestCase
         $this->assertSame($timestamp, $result->getTimestamp());
     }
 
+    #[TestDox('::maybeFrom() returns the same When instance without cloning')]
     public function test_maybeFrom_returns_same_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -189,6 +196,7 @@ class WhenTest extends TestCase
     // ----------------------------------------------------------------
     // from()
 
+    #[TestDox('::from() returns the same When instance without cloning')]
     public function test_from_returns_same_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -213,6 +221,7 @@ class WhenTest extends TestCase
         $this->assertSame($original, $result);
     }
 
+    #[TestDox('::from() creates a When from a DateTimeInterface')]
     public function test_from_creates_when_from_datetime_interface(): void
     {
         // ----------------------------------------------------------------
@@ -243,6 +252,7 @@ class WhenTest extends TestCase
         $this->assertSame(5, $result->getSeconds());
     }
 
+    #[TestDox('::from() creates a When from a mutable DateTime')]
     public function test_from_creates_when_from_mutable_datetime(): void
     {
         // ----------------------------------------------------------------
@@ -273,6 +283,7 @@ class WhenTest extends TestCase
         $this->assertSame(0, $result->getSeconds());
     }
 
+    #[TestDox('::from() creates a When from a UNIX timestamp')]
     public function test_from_creates_when_from_unix_timestamp(): void
     {
         // ----------------------------------------------------------------
@@ -298,6 +309,7 @@ class WhenTest extends TestCase
         $this->assertSame($timestamp, $result->getTimestamp());
     }
 
+    #[TestDox('::from() creates a When from a date/time string')]
     public function test_from_creates_when_from_string(): void
     {
         // ----------------------------------------------------------------
@@ -328,6 +340,7 @@ class WhenTest extends TestCase
     // ----------------------------------------------------------------
     // fromDateTimeInterface()
 
+    #[TestDox('::fromDateTimeInterface() creates a When from a DateTimeInterface')]
     public function test_fromDateTimeInterface_creates_when(): void
     {
         // ----------------------------------------------------------------
@@ -361,6 +374,7 @@ class WhenTest extends TestCase
     // ----------------------------------------------------------------
     // fromRealtime()
 
+    #[TestDox('::fromRealtime() creates a When from a microtime float')]
     public function test_fromRealtime_creates_when_from_float(): void
     {
         // ----------------------------------------------------------------
@@ -386,6 +400,7 @@ class WhenTest extends TestCase
         $this->assertEqualsWithDelta($input, $result->asMicrotime(), delta: 0.001);
     }
 
+    #[TestDox('::fromRealtime() uses the current time when given null')]
     public function test_fromRealtime_uses_current_time_when_null(): void
     {
         // ----------------------------------------------------------------
@@ -418,6 +433,7 @@ class WhenTest extends TestCase
     // ----------------------------------------------------------------
     // fromUnixTimestamp()
 
+    #[TestDox('::fromUnixTimestamp() creates a When from a UNIX timestamp')]
     public function test_fromUnixTimestamp_creates_when(): void
     {
         // ----------------------------------------------------------------
@@ -449,6 +465,7 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
+    #[TestDox('->asDatabaseField() returns the datetime in ATOM format')]
     public function test_asDatabaseField_returns_atom_format(): void
     {
         // ----------------------------------------------------------------
@@ -473,6 +490,7 @@ class WhenTest extends TestCase
         $this->assertSame('2025-06-15T10:30:45+00:00', $result);
     }
 
+    #[TestDox('->asMicrotime() returns a float representation')]
     public function test_asMicrotime_returns_float(): void
     {
         // ----------------------------------------------------------------
@@ -499,6 +517,7 @@ class WhenTest extends TestCase
         $this->assertEqualsWithDelta($input, $result, 0.001);
     }
 
+    #[TestDox('->asUnixTimestamp() returns the UNIX timestamp as an integer')]
     public function test_asUnixTimestamp_returns_int(): void
     {
         // ----------------------------------------------------------------
@@ -530,6 +549,7 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
+    #[TestDox('->asFilesystemFriendlyYearMonth() returns YYYY-MM format')]
     public function test_asFilesystemFriendlyYearMonth_returns_correct_format(): void
     {
         // ----------------------------------------------------------------
@@ -554,6 +574,7 @@ class WhenTest extends TestCase
         $this->assertSame('2025-06', $result);
     }
 
+    #[TestDox('->asFilesystemFriendlyDate() returns YYYY-MM-DD format')]
     public function test_asFilesystemFriendlyDate_returns_correct_format(): void
     {
         // ----------------------------------------------------------------
@@ -578,6 +599,7 @@ class WhenTest extends TestCase
         $this->assertSame('2025-06-15', $result);
     }
 
+    #[TestDox('->asFilesystemFriendlyDateTime() returns YYYYMMDD-HHMMSS format')]
     public function test_asFilesystemFriendlyDateTime_returns_correct_format(): void
     {
         // ----------------------------------------------------------------
@@ -602,6 +624,7 @@ class WhenTest extends TestCase
         $this->assertSame('20250615-103045', $result);
     }
 
+    #[TestDox('->asFilesystemFriendlyDateTimeAndMilliseconds() returns YYYYMMDD-HHMMSS-MS format')]
     public function test_asFilesystemFriendlyDateTimeAndMilliseconds_returns_correct_format(): void
     {
         // ----------------------------------------------------------------
@@ -632,6 +655,7 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
+    #[TestDox('->getYear() returns the year component')]
     public function test_getYear_returns_year(): void
     {
         // ----------------------------------------------------------------
@@ -655,6 +679,7 @@ class WhenTest extends TestCase
         $this->assertSame(2025, $result);
     }
 
+    #[TestDox('->getMonthOfYear() returns the month component')]
     public function test_getMonthOfYear_returns_month(): void
     {
         // ----------------------------------------------------------------
@@ -679,6 +704,7 @@ class WhenTest extends TestCase
         $this->assertSame(6, $result);
     }
 
+    #[TestDox('->getDayOfMonth() returns the day component')]
     public function test_getDayOfMonth_returns_day(): void
     {
         // ----------------------------------------------------------------
@@ -703,6 +729,7 @@ class WhenTest extends TestCase
         $this->assertSame(15, $result);
     }
 
+    #[TestDox('->getHour() returns the hour component')]
     public function test_getHour_returns_hour(): void
     {
         // ----------------------------------------------------------------
@@ -726,6 +753,7 @@ class WhenTest extends TestCase
         $this->assertSame(10, $result);
     }
 
+    #[TestDox('->getMinutes() returns the minutes component')]
     public function test_getMinutes_returns_minutes(): void
     {
         // ----------------------------------------------------------------
@@ -750,6 +778,7 @@ class WhenTest extends TestCase
         $this->assertSame(30, $result);
     }
 
+    #[TestDox('->getSeconds() returns the seconds component')]
     public function test_getSeconds_returns_seconds(): void
     {
         // ----------------------------------------------------------------
@@ -774,6 +803,7 @@ class WhenTest extends TestCase
         $this->assertSame(45, $result);
     }
 
+    #[TestDox('->getMicroseconds() returns the microseconds component')]
     public function test_getMicroseconds_returns_microseconds(): void
     {
         // ----------------------------------------------------------------
@@ -798,6 +828,7 @@ class WhenTest extends TestCase
         $this->assertSame(123456, $result);
     }
 
+    #[TestDox('->get*() extractors handle zero values correctly')]
     public function test_getters_handle_zero_values(): void
     {
         // ----------------------------------------------------------------
@@ -834,6 +865,7 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
+    #[TestDox('->withDateFrom() copies the date from the input and preserves the time')]
     public function test_withDateFrom_copies_date_from_input(): void
     {
         // ----------------------------------------------------------------
@@ -866,6 +898,7 @@ class WhenTest extends TestCase
         $this->assertSame(45, $result->getSeconds());
     }
 
+    #[TestDox('->withDate() replaces the specified date components')]
     public function test_withDate_replaces_year_month_day(): void
     {
         // ----------------------------------------------------------------
@@ -893,6 +926,7 @@ class WhenTest extends TestCase
         $this->assertSame(10, $result->getHour());
     }
 
+    #[TestDox('->withDate() keeps original values when parameters are null')]
     public function test_withDate_keeps_original_when_params_are_null(): void
     {
         // ----------------------------------------------------------------
@@ -919,6 +953,7 @@ class WhenTest extends TestCase
         $this->assertSame(15, $result->getDayOfMonth());
     }
 
+    #[TestDox('->withYear() replaces only the year')]
     public function test_withYear_replaces_only_year(): void
     {
         // ----------------------------------------------------------------
@@ -944,6 +979,7 @@ class WhenTest extends TestCase
         $this->assertSame(15, $result->getDayOfMonth());
     }
 
+    #[TestDox('->withMonthOfYear() replaces only the month')]
     public function test_withMonthOfYear_replaces_only_month(): void
     {
         // ----------------------------------------------------------------
@@ -969,6 +1005,7 @@ class WhenTest extends TestCase
         $this->assertSame(15, $result->getDayOfMonth());
     }
 
+    #[TestDox('->withDayOfMonth() replaces only the day')]
     public function test_withDayOfMonth_replaces_only_day(): void
     {
         // ----------------------------------------------------------------
@@ -994,6 +1031,7 @@ class WhenTest extends TestCase
         $this->assertSame(28, $result->getDayOfMonth());
     }
 
+    #[TestDox('->withDayOfMonth() clamps to the last day of the month')]
     public function test_withDayOfMonth_clamps_to_last_day_of_month(): void
     {
         // ----------------------------------------------------------------
@@ -1018,6 +1056,7 @@ class WhenTest extends TestCase
         $this->assertSame(28, $result->getDayOfMonth());
     }
 
+    #[TestDox('->withDayOfMonth() clamps to 29 in February of a leap year')]
     public function test_withDayOfMonth_clamps_to_29_in_leap_year(): void
     {
         // ----------------------------------------------------------------
@@ -1048,6 +1087,7 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
+    #[TestDox('->withTimeFrom() copies the time from the input and preserves the date')]
     public function test_withTimeFrom_copies_time_from_input(): void
     {
         // ----------------------------------------------------------------
@@ -1079,6 +1119,7 @@ class WhenTest extends TestCase
         $this->assertSame(30, $result->getSeconds());
     }
 
+    #[TestDox('->withTime() replaces the specified time components')]
     public function test_withTime_replaces_time_components(): void
     {
         // ----------------------------------------------------------------
@@ -1107,6 +1148,7 @@ class WhenTest extends TestCase
         $this->assertSame(2025, $result->getYear());
     }
 
+    #[TestDox('->withTime() keeps original values when parameters are null')]
     public function test_withTime_keeps_original_when_params_are_null(): void
     {
         // ----------------------------------------------------------------
@@ -1133,6 +1175,7 @@ class WhenTest extends TestCase
         $this->assertSame(45, $result->getSeconds());
     }
 
+    #[TestDox('->withHour() replaces only the hour')]
     public function test_withHour_replaces_only_hour(): void
     {
         // ----------------------------------------------------------------
@@ -1158,6 +1201,7 @@ class WhenTest extends TestCase
         $this->assertSame(45, $result->getSeconds());
     }
 
+    #[TestDox('->withMinutes() replaces only the minutes')]
     public function test_withMinutes_replaces_only_minutes(): void
     {
         // ----------------------------------------------------------------
@@ -1183,6 +1227,7 @@ class WhenTest extends TestCase
         $this->assertSame(45, $result->getSeconds());
     }
 
+    #[TestDox('->withSeconds() replaces only the seconds')]
     public function test_withSeconds_replaces_only_seconds(): void
     {
         // ----------------------------------------------------------------
@@ -1208,6 +1253,7 @@ class WhenTest extends TestCase
         $this->assertSame(59, $result->getSeconds());
     }
 
+    #[TestDox('->withMicroseconds() replaces only the microseconds')]
     public function test_withMicroseconds_replaces_only_microseconds(): void
     {
         // ----------------------------------------------------------------
@@ -1242,6 +1288,7 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
+    #[TestDox('->modifyDayOfMonth() changes the day using a relative modifier')]
     public function test_modifyDayOfMonth_changes_day(): void
     {
         // ----------------------------------------------------------------
@@ -1271,6 +1318,7 @@ class WhenTest extends TestCase
         $this->assertSame(45, $result->getSeconds());
     }
 
+    #[TestDox('->modifyDayOfMonth() can get the last day of the month')]
     public function test_modifyDayOfMonth_can_get_last_day(): void
     {
         // ----------------------------------------------------------------
@@ -1296,6 +1344,7 @@ class WhenTest extends TestCase
         $this->assertSame(6, $result->getMonthOfYear());
     }
 
+    #[TestDox('->modifyDayOfMonth() preserves the time component')]
     public function test_modifyDayOfMonth_preserves_time(): void
     {
         // ----------------------------------------------------------------
@@ -1322,6 +1371,7 @@ class WhenTest extends TestCase
         $this->assertSame(45, $result->getSeconds());
     }
 
+    #[TestDox('->modifyDayOfMonth() throws if the modifier changes the month or year')]
     public function test_modifyDayOfMonth_throws_if_month_changes(): void
     {
         // ----------------------------------------------------------------
@@ -1344,6 +1394,7 @@ class WhenTest extends TestCase
         $unit->modifyDayOfMonth('fifth monday');
     }
 
+    #[TestDox('->modifyTime() changes the time using a relative modifier')]
     public function test_modifyTime_changes_time(): void
     {
         // ----------------------------------------------------------------
@@ -1370,6 +1421,7 @@ class WhenTest extends TestCase
         $this->assertSame(15, $result->getDayOfMonth());
     }
 
+    #[TestDox('->modifyTime() throws if the modifier changes the date')]
     public function test_modifyTime_throws_if_date_changes(): void
     {
         // ----------------------------------------------------------------
@@ -1396,6 +1448,7 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
+    #[TestDox('->add() returns a When instance')]
     public function test_add_returns_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -1422,6 +1475,7 @@ class WhenTest extends TestCase
         $this->assertSame(16, $result->getDayOfMonth());
     }
 
+    #[TestDox('->modify() returns a When instance')]
     public function test_modify_returns_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -1446,6 +1500,7 @@ class WhenTest extends TestCase
         $this->assertSame(16, $result->getDayOfMonth());
     }
 
+    #[TestDox('->modify() throws on an invalid modifier string')]
     public function test_modify_throws_on_invalid_modifier(): void
     {
         // ----------------------------------------------------------------
@@ -1466,6 +1521,7 @@ class WhenTest extends TestCase
         $unit->modify('not a valid modifier');
     }
 
+    #[TestDox('->setDate() returns a When instance')]
     public function test_setDate_returns_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -1492,6 +1548,7 @@ class WhenTest extends TestCase
         $this->assertSame(20, $result->getDayOfMonth());
     }
 
+    #[TestDox('->setISODate() returns a When instance')]
     public function test_setISODate_returns_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -1515,6 +1572,7 @@ class WhenTest extends TestCase
         $this->assertInstanceOf(When::class, $result);
     }
 
+    #[TestDox('->setTime() returns a When instance')]
     public function test_setTime_returns_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -1541,6 +1599,7 @@ class WhenTest extends TestCase
         $this->assertSame(30, $result->getSeconds());
     }
 
+    #[TestDox('->setTimestamp() returns a When instance')]
     public function test_setTimestamp_returns_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -1566,6 +1625,7 @@ class WhenTest extends TestCase
         $this->assertSame($timestamp, $result->getTimestamp());
     }
 
+    #[TestDox('->setTimezone() returns a When instance')]
     public function test_setTimezone_returns_when_instance(): void
     {
         // ----------------------------------------------------------------
@@ -1591,6 +1651,7 @@ class WhenTest extends TestCase
         $this->assertSame('America/New_York', $result->getTimezone()->getName());
     }
 
+    #[TestDox('->sub() returns a When instance')]
     public function test_sub_returns_when_instance(): void
     {
         // ----------------------------------------------------------------
