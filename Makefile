@@ -46,9 +46,9 @@ clean: ## Remove all Docker containers, volumes, etc
 shell: ## Open a shell on the test container
 	docker compose run --rm test-container-85 ash || true
 
-lint: syntax-check cs-fix phpstan ## Run all static code checks
+all-checks: composer-validate static-checks cs-fix test ## Run all checks
 
-check-all: composer-validate lint test ## Run all checks
+static-checks: syntax-check phpstan ## Run all static code checks
 
 cs: ## Run code style checks
 	docker compose run --rm test-container-85 sh -c "vendor/bin/phpcs ${OPTS}"
@@ -60,8 +60,7 @@ phpstan: ## Run all static analysis checks
 	docker compose run --rm test-container-85 vendor/bin/phpstan $(PHPSTAN_XDEBUG) --memory-limit=-1 ${OPTS}
 
 syntax-check: ## Check all PHP files for syntax errors
-	@docker compose run --rm test-container-85 find src -name '*.php' | xargs php -l
-	@docker compose run --rm test-container-85 find tests -name '*.php' | xargs php -l
+	@docker compose run --rm test-container-85 find src tests -name '*.php' | xargs php -l
 
 test: unit ## Run all tests
 
