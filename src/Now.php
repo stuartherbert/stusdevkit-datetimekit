@@ -51,7 +51,7 @@ use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
  *
  * Set this in your app's bootstrap file (by calling `Now::init()`).
  *
- * Code such as HTTP and API request handlers benefit grately from having
+ * Code such as HTTP and API request handlers benefit greatly from having
  * a single fixed value for 'now' throughout their execution.
  */
 class Now

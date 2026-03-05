@@ -1,6 +1,6 @@
 {
     "name": "stusdevkit/datetimekit",
-    "description": "Now and When support",
+    "description": "Immutable datetime helpers for PHP: a When value object and a fixed Now clock with test clock support",
     "type": "library",
     "license": "BSD-3-Clause",
     "autoload": {
@@ -21,7 +21,6 @@
         }
     ],
     "require": {
-        "ramsey/uuid": "^4.9"
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "^3.1",

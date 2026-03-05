@@ -41,7 +41,6 @@ declare(strict_types=1);
 
 namespace StusDevKit\DateTimeKit\Formatters;
 
-use DateTimeInterface;
 use DateTimeZone;
 use NoDiscard;
 use StusDevKit\DateTimeKit\When;
@@ -77,6 +76,6 @@ class WhenHttpFormatter
     {
         return $this->when
             ->setTimezone(new DateTimeZone('GMT'))
-            ->format(DateTimeInterface::RFC7231);
+            ->format('D, d M Y H:i:s \G\M\T');
     }
 }

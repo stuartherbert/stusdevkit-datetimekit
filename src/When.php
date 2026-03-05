@@ -201,8 +201,6 @@ class When extends DateTimeImmutable
 
     /**
      * Converts to a UNIX timestamp.
-     *
-     * If you're not on a UNIX system, what are you doing with your life?
      */
     public function asUnixTimestamp(): int
     {

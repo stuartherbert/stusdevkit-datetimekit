@@ -41,16 +41,7 @@
         </properties>
     </rule>
 
-    <rule ref="Squiz.Classes.ClassFileName.NoMatch">
-        <exclude-pattern>src/ConfigProvider.*.php</exclude-pattern>
-    </rule>
-
     <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
         <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
-
-    <rule ref="PSR12.Files.FileHeader.IncorrectOrder">
-        <exclude-pattern>config/pipeline.php</exclude-pattern>
-        <exclude-pattern>src/MezzioInstaller/Resources/config/routes-*.php</exclude-pattern>
     </rule>
 </ruleset>
