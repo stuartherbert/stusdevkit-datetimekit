@@ -142,7 +142,7 @@ class When extends DateTimeImmutable
     #[NoDiscard]
     public static function fromDateTimeInterface(DateTimeInterface $input): static
     {
-        return new static($input->format('Y-m-d H:i:s.u P'));
+        return new static($input->format('Y-m-d H:i:s.u e'));
     }
 
     /**
@@ -220,7 +220,7 @@ class When extends DateTimeImmutable
      */
     public function getYear(): int
     {
-        return self::paranoidConvertStringToInt($this->format('Y'));
+        return (int) $this->format('Y');
     }
 
     /**
@@ -228,7 +228,7 @@ class When extends DateTimeImmutable
      */
     public function getMonthOfYear(): int
     {
-        return self::paranoidConvertStringToInt($this->format('m'));
+        return (int) $this->format('m');
     }
 
     /**
@@ -236,7 +236,7 @@ class When extends DateTimeImmutable
      */
     public function getDayOfMonth(): int
     {
-        return self::paranoidConvertStringToInt($this->format('d'));
+        return (int) $this->format('d');
     }
 
     /**
@@ -244,7 +244,7 @@ class When extends DateTimeImmutable
      */
     public function getHour(): int
     {
-        return self::paranoidConvertStringToInt($this->format('H'));
+        return (int) $this->format('H');
     }
 
     /**
@@ -252,7 +252,7 @@ class When extends DateTimeImmutable
      */
     public function getMinutes(): int
     {
-        return self::paranoidConvertStringToInt($this->format('i'));
+        return (int) $this->format('i');
     }
 
     /**
@@ -260,7 +260,7 @@ class When extends DateTimeImmutable
      */
     public function getSeconds(): int
     {
-        return self::paranoidConvertStringToInt($this->format('s'));
+        return (int) $this->format('s');
     }
 
     /**
@@ -268,27 +268,7 @@ class When extends DateTimeImmutable
      */
     public function getMicroseconds(): int
     {
-        return self::paranoidConvertStringToInt($this->format('u'));
-    }
-
-    /**
-     * helper method for the getters that need to convert the output
-     * of `format()` into integers
-     *
-     * safely handles leading zeros in the strings that Derick's
-     * underlying code returns to us
-     */
-    private static function paranoidConvertStringToInt(string $input): int
-    {
-        // strip off leading zeros, just in case they cause problems
-        // now or in the future
-        $input = ltrim($input, '0');
-        if ($input === "") {
-            $input = 0;
-        }
-
-        // convert to int
-        return (int) $input;
+        return (int) $this->format('u');
     }
 
     // ================================================================
@@ -611,7 +591,7 @@ class When extends DateTimeImmutable
     #[Override]
     public function setDate(int $year, int $month, int $day): static
     {
-        return static::from(parent::setDate($year, $month, $day));
+        return static::fromDateTimeInterface(parent::setDate($year, $month, $day));
     }
 
     /**
@@ -624,7 +604,7 @@ class When extends DateTimeImmutable
     #[Override]
     public function setISODate(int $year, int $week, int $dayOfWeek = 1): static
     {
-        return static::from(parent::setISODate($year, $week, $dayOfWeek));
+        return static::fromDateTimeInterface(parent::setISODate($year, $week, $dayOfWeek));
     }
 
     /**
@@ -637,7 +617,7 @@ class When extends DateTimeImmutable
     #[Override]
     public function setTime(int $hour, int $minute, int $second = 0, int $microsecond = 0): static
     {
-        return static::from(parent::setTime($hour, $minute, $second, $microsecond));
+        return static::fromDateTimeInterface(parent::setTime($hour, $minute, $second, $microsecond));
     }
 
     /**
@@ -651,7 +631,7 @@ class When extends DateTimeImmutable
     #[Override]
     public function setTimestamp(int $timestamp): static
     {
-        return static::from(parent::setTimestamp($timestamp));
+        return static::fromDateTimeInterface(parent::setTimestamp($timestamp));
     }
 
     /**
@@ -664,7 +644,7 @@ class When extends DateTimeImmutable
     #[Override]
     public function setTimezone(DateTimeZone $timezone): static
     {
-        return static::from(parent::setTimezone($timezone));
+        return static::fromDateTimeInterface(parent::setTimezone($timezone));
     }
 
     /**

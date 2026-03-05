@@ -372,6 +372,40 @@ class WhenTest extends TestCase
         $this->assertSame(45, $result->getSeconds());
     }
 
+    #[TestDox('::fromDateTimeInterface() preserves numeric timezone offsets')]
+    public function test_fromDateTimeInterface_preserves_numeric_offset(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that fromDateTimeInterface()
+        // correctly handles numeric timezone offsets such
+        // as those commonly found in database fields
+        // (e.g. '2025-06-15 10:30:45+05:30')
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $input = new DateTimeImmutable('2025-06-15 10:30:45+05:30');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = When::fromDateTimeInterface($input);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(When::class, $result);
+        $this->assertSame(2025, $result->getYear());
+        $this->assertSame(6, $result->getMonthOfYear());
+        $this->assertSame(15, $result->getDayOfMonth());
+        $this->assertSame(10, $result->getHour());
+        $this->assertSame(30, $result->getMinutes());
+        $this->assertSame(45, $result->getSeconds());
+        $this->assertSame('+05:30', $result->getTimezone()->getName());
+    }
+
     // ----------------------------------------------------------------
     // fromRealtime()
 
