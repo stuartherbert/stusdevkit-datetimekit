@@ -43,6 +43,7 @@ namespace StusDevKit\DateTimeKit;
 
 use DateInterval;
 use DateTimeInterface;
+use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
 
 /**
  * Represents the current datetime in your app.
@@ -100,14 +101,20 @@ class Now
     }
 
     /**
-     * Converts to a string that can be stored in Postgres' `datetime`
-     * database column type.
+     * Returns a formatter router for domain-specific formatting.
      *
-     * Repeated calls to this method will return the exact same value.
+     * Usage:
+     *
+     *     Now::asFormat()->filesystem()->date();
+     *     Now::asFormat()->database()->postgres();
+     *     Now::asFormat()->http()->rfc9110();
+     *
+     * Repeated calls to this method will return the exact same
+     * underlying datetime value.
      */
-    public static function asDatabaseField(): string
+    public static function asFormat(): WhenFormatter
     {
-        return static::$cachedDateTime->asFormat()->database()->postgres();
+        return static::$cachedDateTime->asFormat();
     }
 
     /**

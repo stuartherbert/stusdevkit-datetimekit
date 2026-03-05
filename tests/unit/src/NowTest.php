@@ -47,6 +47,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
+use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
 use StusDevKit\DateTimeKit\Now;
 use StusDevKit\DateTimeKit\When;
 
@@ -200,17 +201,16 @@ class NowTest extends TestCase
     }
 
     // ----------------------------------------------------------------
-    // asDatabaseField()
+    // asFormat()
 
-    #[TestDox('::asDatabaseField() returns a database-compatible string')]
-    public function test_asDatabaseField_returns_database_string(): void
+    #[TestDox('::asFormat() returns a WhenFormatter')]
+    public function test_asFormat_returns_when_formatter(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that asDatabaseField() returns
-        // an ATOM-formatted datetime string suitable for
-        // Postgres datetime columns
+        // this test proves that asFormat() returns a WhenFormatter
+        // instance that delegates to the underlying When object
 
         // ----------------------------------------------------------------
         // setup your test
@@ -220,7 +220,32 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = Now::asDatabaseField();
+        $result = Now::asFormat();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(WhenFormatter::class, $result);
+    }
+
+    #[TestDox('::asFormat() uses the cached Now datetime')]
+    public function test_asFormat_uses_cached_now_datetime(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that asFormat() formats the cached
+        // Now datetime, not a new datetime
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        Now::setTestClock('2025-06-15 10:30:00+00:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = Now::asFormat()->database()->postgres();
 
         // ----------------------------------------------------------------
         // test the results
@@ -229,32 +254,6 @@ class NowTest extends TestCase
             '2025-06-15T10:30:00+00:00',
             $result,
         );
-    }
-
-    #[TestDox('::asDatabaseField() returns the same value on repeated calls')]
-    public function test_asDatabaseField_returns_same_value_on_repeated_calls(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that repeated calls to asDatabaseField()
-        // return the exact same value
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        Now::setTestClock('2025-06-15 10:30:00+00:00');
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result1 = Now::asDatabaseField();
-        $result2 = Now::asDatabaseField();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertSame($result1, $result2);
     }
 
     // ----------------------------------------------------------------
