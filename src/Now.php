@@ -145,16 +145,6 @@ class Now
     }
 
     /**
-     * Returns the underlying `When` object.
-     *
-     * Repeated calls to this method will return the exact same value.
-     */
-    public static function asWhen(): When
-    {
-        return static::$cachedDateTime;
-    }
-
-    /**
      * If `$input` is `null`, return the current value of `Now`.
      *
      * Otherwise, return `$input` as a `When` type.

@@ -125,7 +125,6 @@ use StusDevKit\DateTimeKit\Now;
 
 // get the current time as different types
 $when      = Now::now();              // When instance
-$when      = Now::asWhen();           // same as now()
 $timestamp = Now::asUnixTimestamp();  // int
 $dateTime  = Now::asDateTimeImmutable(); // returns new DateTimeImmutable instance
 

@@ -98,7 +98,7 @@ class NowTest extends TestCase
         // test the results
 
         $after = new When('now');
-        $now = Now::asWhen();
+        $now = Now::now();
 
         $this->assertGreaterThanOrEqual(
             $before->asUnixTimestamp(),
@@ -135,7 +135,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $now = Now::asWhen();
+        $now = Now::now();
 
         // the year should no longer be 2020
         $this->assertNotSame(2020, $now->getYear());
@@ -395,58 +395,7 @@ class NowTest extends TestCase
         $this->assertSame($result1, $result2);
     }
 
-    // ----------------------------------------------------------------
-    // asWhen()
 
-    #[TestDox('::asWhen() returns a When instance')]
-    public function test_asWhen_returns_when_instance(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that asWhen() returns a When instance
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        Now::setTestClock('2025-06-15 10:30:00');
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result = Now::asWhen();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertInstanceOf(When::class, $result);
-    }
-
-    #[TestDox('::asWhen() returns the same value on repeated calls')]
-    public function test_asWhen_returns_same_value_on_repeated_calls(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that repeated calls to asWhen()
-        // return the exact same When object
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        Now::setTestClock('2025-06-15 10:30:00');
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result1 = Now::asWhen();
-        $result2 = Now::asWhen();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertSame($result1, $result2);
-    }
 
     // ----------------------------------------------------------------
     // or()
@@ -464,7 +413,7 @@ class NowTest extends TestCase
         // setup your test
 
         Now::setTestClock('2025-06-15 10:30:00');
-        $expectedWhen = Now::asWhen();
+        $expectedWhen = Now::now();
 
         // ----------------------------------------------------------------
         // perform the change
@@ -618,7 +567,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2024, $when->getYear());
         $this->assertSame(3, $when->getMonthOfYear());
         $this->assertSame(20, $when->getDayOfMonth());
@@ -674,7 +623,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2024, $when->getYear());
         $this->assertSame(3, $when->getMonthOfYear());
         $this->assertSame(20, $when->getDayOfMonth());
@@ -702,7 +651,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2024, $when->getYear());
         $this->assertSame(3, $when->getMonthOfYear());
         $this->assertSame(20, $when->getDayOfMonth());
@@ -733,7 +682,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2025, $when->getYear());
         $this->assertSame(6, $when->getMonthOfYear());
         $this->assertSame(16, $when->getDayOfMonth());
@@ -763,7 +712,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2025, $when->getYear());
         $this->assertSame(6, $when->getMonthOfYear());
         $this->assertSame(15, $when->getDayOfMonth());
@@ -797,7 +746,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2025, $when->getYear());
         $this->assertSame(6, $when->getMonthOfYear());
         $this->assertSame(16, $when->getDayOfMonth());
@@ -827,7 +776,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2025, $when->getYear());
         $this->assertSame(6, $when->getMonthOfYear());
         $this->assertSame(15, $when->getDayOfMonth());
@@ -861,7 +810,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2025, $when->getYear());
         $this->assertSame(6, $when->getMonthOfYear());
         $this->assertSame(14, $when->getDayOfMonth());
@@ -891,7 +840,7 @@ class NowTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $when = Now::asWhen();
+        $when = Now::now();
         $this->assertSame(2025, $when->getYear());
         $this->assertSame(6, $when->getMonthOfYear());
         $this->assertSame(15, $when->getDayOfMonth());
