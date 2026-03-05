@@ -147,6 +147,59 @@ class NowTest extends TestCase
     // ----------------------------------------------------------------
 
     // ----------------------------------------------------------------
+    // now()
+
+    #[TestDox('::now() returns a When instance')]
+    public function test_now_returns_when_instance(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that now() returns a When instance
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        Now::setTestClock('2025-06-15 10:30:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = Now::now();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(When::class, $result);
+    }
+
+    #[TestDox('::now() returns the same value on repeated calls')]
+    public function test_now_returns_same_value_on_repeated_calls(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that repeated calls to now()
+        // return the exact same When object
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        Now::setTestClock('2025-06-15 10:30:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result1 = Now::now();
+        $result2 = Now::now();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertSame($result1, $result2);
+    }
+
+    // ----------------------------------------------------------------
     // asDatabaseField()
 
     #[TestDox('::asDatabaseField() returns a database-compatible string')]

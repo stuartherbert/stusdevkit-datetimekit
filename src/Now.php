@@ -90,6 +90,16 @@ class Now
     // ----------------------------------------------------------------
 
     /**
+     * Returns the underlying `When` object.
+     *
+     * Repeated calls to this method will return the exact same value.
+     */
+    public static function now(): When
+    {
+        return static::$cachedDateTime;
+    }
+
+    /**
      * Converts to a string that can be stored in Postgres' `datetime`
      * database column type.
      *
