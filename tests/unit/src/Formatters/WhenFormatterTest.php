@@ -41,117 +41,94 @@
 //
 
 declare(strict_types=1);
-namespace StusDevKit\DateTimeKit\Tests\Unit;
+namespace StusDevKit\DateTimeKit\Tests\Unit\Formatters;
 
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use StusDevKit\DateTimeKit\When;
+use StusDevKit\DateTimeKit\Formatters\WhenDatabaseFormatter;
 use StusDevKit\DateTimeKit\Formatters\WhenFilesystemFormatter;
+use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
+use StusDevKit\DateTimeKit\Formatters\WhenHttpFormatter;
 
-#[TestDox('WhenFilesystemFormatter')]
-class WhenFilesystemFormatterTest extends TestCase
+#[TestDox('WhenFormatter')]
+class WhenFormatterTest extends TestCase
 {
-    #[TestDox('->yearMonth() returns YYYY-MM format')]
-    public function test_yearMonth_returns_correct_format(): void
+    #[TestDox('->filesystem() returns a WhenFilesystemFormatter')]
+    public function test_filesystem_returns_filesystem_formatter(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that yearMonth() returns the datetime
-        // in YYYY-MM format
+        // this test proves that filesystem() returns a
+        // WhenFilesystemFormatter instance
 
         // ----------------------------------------------------------------
         // setup your test
 
         $when = new When('2025-06-15 10:30:45');
-        $unit = new WhenFilesystemFormatter($when);
+        $unit = new WhenFormatter($when);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = $unit->yearMonth();
+        $result = $unit->filesystem();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertSame('2025-06', $result);
+        $this->assertInstanceOf(WhenFilesystemFormatter::class, $result);
     }
 
-    #[TestDox('->date() returns YYYY-MM-DD format')]
-    public function test_date_returns_correct_format(): void
+    #[TestDox('->database() returns a WhenDatabaseFormatter')]
+    public function test_database_returns_database_formatter(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that date() returns the datetime in
-        // YYYY-MM-DD format
+        // this test proves that database() returns a
+        // WhenDatabaseFormatter instance
 
         // ----------------------------------------------------------------
         // setup your test
 
         $when = new When('2025-06-15 10:30:45');
-        $unit = new WhenFilesystemFormatter($when);
+        $unit = new WhenFormatter($when);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = $unit->date();
+        $result = $unit->database();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertSame('2025-06-15', $result);
+        $this->assertInstanceOf(WhenDatabaseFormatter::class, $result);
     }
 
-    #[TestDox('->dateTime() returns YYYYMMDD-HHMMSS format')]
-    public function test_dateTime_returns_correct_format(): void
+    #[TestDox('->http() returns a WhenHttpFormatter')]
+    public function test_http_returns_http_formatter(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that dateTime() returns the datetime
-        // in YYYYMMDD-HHMMSS format
+        // this test proves that http() returns a
+        // WhenHttpFormatter instance
 
         // ----------------------------------------------------------------
         // setup your test
 
         $when = new When('2025-06-15 10:30:45');
-        $unit = new WhenFilesystemFormatter($when);
+        $unit = new WhenFormatter($when);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = $unit->dateTime();
+        $result = $unit->http();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertSame('20250615-103045', $result);
-    }
-
-    #[TestDox('->dateTimeAndMilliseconds() returns YYYYMMDD-HHMMSS-MS format')]
-    public function test_dateTimeAndMilliseconds_returns_correct_format(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that dateTimeAndMilliseconds() returns
-        // the datetime in YYYYMMDD-HHMMSS-MS format
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $when = When::fromRealtime(1718451045.123);
-        $unit = new WhenFilesystemFormatter($when);
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result = $unit->dateTimeAndMilliseconds();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertMatchesRegularExpression('/^\d{8}-\d{6}-\d{3}$/', $result);
+        $this->assertInstanceOf(WhenHttpFormatter::class, $result);
     }
 }

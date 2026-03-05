@@ -41,7 +41,7 @@
 //
 
 declare(strict_types=1);
-namespace StusDevKit\DateTimeKit\Tests\Unit;
+namespace StusDevKit\DateTimeKit\Tests\Unit\Formatters;
 
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
