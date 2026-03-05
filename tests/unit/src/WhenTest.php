@@ -52,6 +52,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use StusDevKit\DateTimeKit\When;
+use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
 
 #[TestDox('When')]
 class WhenTest extends TestCase
@@ -397,7 +398,7 @@ class WhenTest extends TestCase
         // test the results
 
         $this->assertInstanceOf(When::class, $result);
-        $this->assertEqualsWithDelta($input, $result->asMicrotime(), delta: 0.001);
+        $this->assertEqualsWithDelta($input, $result->asMicrotime(), 0.001);
     }
 
     #[TestDox('::fromRealtime() uses the current time when given null')]
@@ -426,7 +427,7 @@ class WhenTest extends TestCase
         $this->assertEqualsWithDelta(
             $before,
             $result->asMicrotime(),
-            delta: 1.0,
+            1.0,
         );
     }
 
@@ -465,14 +466,14 @@ class WhenTest extends TestCase
     //
     // ----------------------------------------------------------------
 
-    #[TestDox('->asDatabaseField() returns the datetime in ATOM format')]
-    public function test_asDatabaseField_returns_atom_format(): void
+    #[TestDox('->asFormat() returns a WhenFormatter')]
+    public function test_asFormat_returns_when_formatter(): void
     {
         // ----------------------------------------------------------------
         // explain your test
 
-        // this test proves that asDatabaseField() returns the datetime
-        // in ATOM format
+        // this test proves that asFormat() returns a WhenFormatter
+        // instance for domain-specific formatting
 
         // ----------------------------------------------------------------
         // setup your test
@@ -482,12 +483,12 @@ class WhenTest extends TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = $unit->asDatabaseField();
+        $result = $unit->asFormat();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertSame('2025-06-15T10:30:45+00:00', $result);
+        $this->assertInstanceOf(WhenFormatter::class, $result);
     }
 
     #[TestDox('->asMicrotime() returns a float representation')]
@@ -513,7 +514,6 @@ class WhenTest extends TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertIsFloat($result);
         $this->assertEqualsWithDelta($input, $result, 0.001);
     }
 
@@ -543,111 +543,6 @@ class WhenTest extends TestCase
         $this->assertSame($timestamp, $result);
     }
 
-    // ================================================================
-    //
-    // Filesystem helpers
-    //
-    // ----------------------------------------------------------------
-
-    #[TestDox('->asFilesystemFriendlyYearMonth() returns YYYY-MM format')]
-    public function test_asFilesystemFriendlyYearMonth_returns_correct_format(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that asFilesystemFriendlyYearMonth() returns
-        // the datetime in YYYY-MM format
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $unit = new When('2025-06-15 10:30:45');
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result = $unit->asFilesystemFriendlyYearMonth();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertSame('2025-06', $result);
-    }
-
-    #[TestDox('->asFilesystemFriendlyDate() returns YYYY-MM-DD format')]
-    public function test_asFilesystemFriendlyDate_returns_correct_format(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that asFilesystemFriendlyDate() returns the
-        // datetime in YYYY-MM-DD format
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $unit = new When('2025-06-15 10:30:45');
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result = $unit->asFilesystemFriendlyDate();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertSame('2025-06-15', $result);
-    }
-
-    #[TestDox('->asFilesystemFriendlyDateTime() returns YYYYMMDD-HHMMSS format')]
-    public function test_asFilesystemFriendlyDateTime_returns_correct_format(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that asFilesystemFriendlyDateTime() returns
-        // the datetime in YYYYMMDD-HHMMSS format
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $unit = new When('2025-06-15 10:30:45');
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result = $unit->asFilesystemFriendlyDateTime();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertSame('20250615-103045', $result);
-    }
-
-    #[TestDox('->asFilesystemFriendlyDateTimeAndMilliseconds() returns YYYYMMDD-HHMMSS-MS format')]
-    public function test_asFilesystemFriendlyDateTimeAndMilliseconds_returns_correct_format(): void
-    {
-        // ----------------------------------------------------------------
-        // explain your test
-
-        // this test proves that asFilesystemFriendlyDateTimeAndMilliseconds()
-        // returns the datetime in YYYYMMDD-HHMMSS-MS format
-
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $unit = When::fromRealtime(1718451045.123);
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $result = $unit->asFilesystemFriendlyDateTimeAndMilliseconds();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertMatchesRegularExpression('/^\d{8}-\d{6}-\d{3}$/', $result);
-    }
 
     // ================================================================
     //
@@ -1391,7 +1286,7 @@ class WhenTest extends TestCase
         // perform the change
 
         $this->expectException(InvalidArgumentException::class);
-        $unit->modifyDayOfMonth('fifth monday');
+        $_ = $unit->modifyDayOfMonth('fifth monday');
     }
 
     #[TestDox('->modifyTime() changes the time using a relative modifier')]
@@ -1439,7 +1334,7 @@ class WhenTest extends TestCase
         // perform the change
 
         $this->expectException(InvalidArgumentException::class);
-        $unit->modifyTime('+1 day');
+        $_ = $unit->modifyTime('+1 day');
     }
 
     // ================================================================
@@ -1518,7 +1413,7 @@ class WhenTest extends TestCase
         // perform the change
 
         $this->expectException(DateMalformedStringException::class);
-        $unit->modify('not a valid modifier');
+        $_ = $unit->modify('not a valid modifier');
     }
 
     #[TestDox('->setDate() returns a When instance')]

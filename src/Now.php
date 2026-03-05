@@ -107,7 +107,7 @@ class Now
      */
     public static function asDatabaseField(): string
     {
-        return static::$cachedDateTime->asDatabaseField();
+        return static::$cachedDateTime->asFormat()->database()->postgres();
     }
 
     /**

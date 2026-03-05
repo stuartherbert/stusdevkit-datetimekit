@@ -49,6 +49,7 @@ use DateTimeZone;
 use InvalidArgumentException;
 use NoDiscard;
 use Override;
+use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
 
 /**
  * A `DateTimeImmutable` with added convenience.
@@ -174,12 +175,17 @@ class When extends DateTimeImmutable
     // ----------------------------------------------------------------
 
     /**
-     * Converts to a string that can be stored in Postgres' `datetime`
-     * database column type.
+     * Returns a formatter router for domain-specific formatting.
+     *
+     * Usage:
+     *
+     *     $when->asFormat()->filesystem()->date();
+     *     $when->asFormat()->database()->postgres();
      */
-    public function asDatabaseField(): string
+    #[NoDiscard]
+    public function asFormat(): WhenFormatter
     {
-        return $this->format(DateTimeInterface::ATOM);
+        return new WhenFormatter($this);
     }
 
     /**
@@ -201,66 +207,6 @@ class When extends DateTimeImmutable
     public function asUnixTimestamp(): int
     {
         return $this->getTimestamp();
-    }
-
-    // ================================================================
-    //
-    // Filesystem helpers
-    //
-    // ----------------------------------------------------------------
-
-    /**
-     * Returns year,month in `YYYY-MM` format.
-     *
-     * Useful for creating per-month directories on your filesystem.
-     *
-     * This format sorts naturally in `ls` output, and in most sane
-     * filesystem browsers.
-     */
-    public function asFilesystemFriendlyYearMonth(): string
-    {
-        return $this->format('Y-m');
-    }
-
-    /**
-     * Returns year/month/day in `YYYY-MM-DD` format.
-     *
-     * Useful for creating per-day directories on your filesystem.
-     *
-     * This format sorts naturally in `ls` output, and in most sane
-     * filesystem browsers.
-     */
-    public function asFilesystemFriendlyDate(): string
-    {
-        return $this->format('Y-m-d');
-    }
-
-    /**
-     * Returns year,month,day,hours,minutes,seconds in `YYYYMMDD-HHMMSS`
-     * format.
-     *
-     * Useful for creating filenames on your filesystem.
-     *
-     * This format sorts naturally in `ls` output, and in most sane
-     * filesystem browsers.
-     */
-    public function asFilesystemFriendlyDateTime(): string
-    {
-        return $this->format('Ymd-His');
-    }
-
-    /**
-     * Returns year,month,day,hours,minutes,seconds,milliseconds in
-     * `YYYYMMDD-HHMMSS-MS` format.
-     *
-     * Useful for creating filenames on your filesystem.
-     *
-     * This format sorts naturally in `ls` output, and in most sane
-     * filesystem browsers.
-     */
-    public function asFilesystemFriendlyDateTimeAndMilliseconds(): string
-    {
-        return $this->format('Ymd-His-v');
     }
 
     // ================================================================
@@ -573,7 +519,7 @@ class When extends DateTimeImmutable
         $retval = $this->modify($fullModifier);
 
         // has the modifier changed the month / year?
-        if ($retval->asFilesystemFriendlyYearMonth() !== $this->asFilesystemFriendlyYearMonth()) {
+        if ($retval->asFormat()->filesystem()->yearMonth() !== $this->asFormat()->filesystem()->yearMonth()) {
             throw new InvalidArgumentException("{$modifier} changed the month or year; only allowed to change the day of the month");
         }
 
@@ -600,7 +546,7 @@ class When extends DateTimeImmutable
     {
         $retval = $this->modify($modifier);
 
-        if ($retval->asFilesystemFriendlyDate() !== $this->asFilesystemFriendlyDate()) {
+        if ($retval->asFormat()->filesystem()->date() !== $this->asFormat()->filesystem()->date()) {
             throw new InvalidArgumentException("{$modifier} changed the date; only allowed to change the time");
         }
 
