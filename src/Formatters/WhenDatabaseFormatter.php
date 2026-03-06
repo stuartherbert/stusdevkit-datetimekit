@@ -52,7 +52,7 @@ use StusDevKit\DateTimeKit\When;
  *
  *     $when->asFormat()->database()->postgres();
  */
-class WhenDatabaseFormatter
+class WhenDatabaseFormatter implements WhenGroupFormatterInterface
 {
     public function __construct(
         private readonly When $when,

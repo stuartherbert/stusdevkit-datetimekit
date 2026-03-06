@@ -41,41 +41,21 @@ declare(strict_types=1);
 
 namespace StusDevKit\DateTimeKit\Formatters;
 
-use DateTimeZone;
-use NoDiscard;
 use StusDevKit\DateTimeKit\When;
 
 /**
- * Formats a `When` for use in HTTP headers.
+ * Contract for transformers that convert a `When` into
+ * any type.
  *
- * Usage:
+ * Unlike `WhenSingleFormatterInterface` (which returns
+ * `string`), this interface allows returning any value.
  *
- *     $when->asFormat()->http()->rfc9110();
+ * Implement this interface when you have an existing object
+ * that needs to transform a `When`:
+ *
+ *     $when->transformUsing($myTransformer);
  */
-class WhenHttpFormatter implements WhenGroupFormatterInterface
+interface WhenSingleTransformerInterface
 {
-    public function __construct(
-        private readonly When $when,
-    ) {
-    }
-
-    /**
-     * Formats as an RFC 9110 HTTP date.
-     *
-     * This is the preferred format for HTTP headers such as
-     * `Date`, `Last-Modified`, and `Expires`.
-     *
-     * Example output: `Sun, 06 Nov 1994 08:49:37 GMT`
-     *
-     * RFC 9110 (which supersedes RFC 7231) requires the date
-     * to be in GMT (UTC). The format is identical to
-     * RFC 5322's IMF-fixdate.
-     */
-    #[NoDiscard]
-    public function rfc9110(): string
-    {
-        return $this->when
-            ->setTimezone(new DateTimeZone('GMT'))
-            ->format('D, d M Y H:i:s \G\M\T');
-    }
+    public function transformWhen(When $when): mixed;
 }

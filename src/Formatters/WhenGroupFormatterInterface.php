@@ -41,41 +41,27 @@ declare(strict_types=1);
 
 namespace StusDevKit\DateTimeKit\Formatters;
 
-use DateTimeZone;
-use NoDiscard;
 use StusDevKit\DateTimeKit\When;
 
 /**
- * Formats a `When` for use in HTTP headers.
+ * Contract for multi-method formatter classes that can be
+ * instantiated by `When::formatWith()`.
  *
- * Usage:
+ * Implement this interface to create a group of related
+ * format methods that can be accessed via:
  *
- *     $when->asFormat()->http()->rfc9110();
+ *     $when->formatWith(MyFormatter::class)->myMethod();
+ *
+ * Your class can have as many public formatting methods
+ * as you need.
+ *
+ * NOTE: PHP does not enforce constructor signatures via
+ * interfaces. `When::formatWith()` validates at runtime
+ * that the given class implements this interface, but
+ * cannot guarantee your constructor accepts exactly one
+ * `When` parameter. Follow the documented convention.
  */
-class WhenHttpFormatter implements WhenGroupFormatterInterface
+interface WhenGroupFormatterInterface
 {
-    public function __construct(
-        private readonly When $when,
-    ) {
-    }
-
-    /**
-     * Formats as an RFC 9110 HTTP date.
-     *
-     * This is the preferred format for HTTP headers such as
-     * `Date`, `Last-Modified`, and `Expires`.
-     *
-     * Example output: `Sun, 06 Nov 1994 08:49:37 GMT`
-     *
-     * RFC 9110 (which supersedes RFC 7231) requires the date
-     * to be in GMT (UTC). The format is identical to
-     * RFC 5322's IMF-fixdate.
-     */
-    #[NoDiscard]
-    public function rfc9110(): string
-    {
-        return $this->when
-            ->setTimezone(new DateTimeZone('GMT'))
-            ->format('D, d M Y H:i:s \G\M\T');
-    }
+    public function __construct(When $when);
 }

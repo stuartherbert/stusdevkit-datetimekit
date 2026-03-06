@@ -50,6 +50,9 @@ use InvalidArgumentException;
 use NoDiscard;
 use Override;
 use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
+use StusDevKit\DateTimeKit\Formatters\WhenGroupFormatterInterface;
+use StusDevKit\DateTimeKit\Formatters\WhenSingleFormatterInterface;
+use StusDevKit\DateTimeKit\Formatters\WhenSingleTransformerInterface;
 
 /**
  * A `DateTimeImmutable` with added convenience.
@@ -186,6 +189,65 @@ class When extends DateTimeImmutable
     public function asFormat(): WhenFormatter
     {
         return new WhenFormatter($this);
+    }
+
+    /**
+     * Returns a custom group formatter for this datetime.
+     *
+     * Pass a class-string to get a fully-typed formatter
+     * instance with IDE autocomplete on all its methods.
+     *
+     * Usage:
+     *
+     *     $when->formatWith(MyFormatter::class)->myMethod();
+     *
+     * @template T of WhenGroupFormatterInterface
+     * @param class-string<T> $formatterClass
+     * @return T
+     */
+    #[NoDiscard]
+    public function formatWith(string $formatterClass): object
+    {
+        if (! is_a($formatterClass, WhenGroupFormatterInterface::class, allow_string: true)) {
+            throw new InvalidArgumentException(
+                $formatterClass . ' does not implement WhenGroupFormatterInterface'
+            );
+        }
+
+        return new $formatterClass($this);
+    }
+
+    /**
+     * Formats this datetime using an existing formatter
+     * instance.
+     *
+     * Usage:
+     *
+     *     $when->formatUsing($myFormatter);
+     */
+    #[NoDiscard]
+    public function formatUsing(
+        WhenSingleFormatterInterface $formatter,
+    ): string {
+        return $formatter->formatWhen($this);
+    }
+
+    /**
+     * Transforms this datetime using an existing transformer
+     * instance.
+     *
+     * Unlike `formatUsing()` (which returns `string`), this
+     * method can return any type.
+     *
+     * Usage:
+     *
+     *     $when->transformUsing($myTransformer);
+     */
+    #[NoDiscard]
+    public function transformUsing(
+        WhenSingleTransformerInterface $transformer,
+    ): mixed {
+        return $transformer->transformWhen($this);
     }
 
     /**

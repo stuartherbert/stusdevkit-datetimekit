@@ -49,6 +49,9 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
 use StusDevKit\DateTimeKit\Now;
+use StusDevKit\DateTimeKit\Tests\Unit\Fixtures\StubGroupFormatter;
+use StusDevKit\DateTimeKit\Tests\Unit\Fixtures\StubSingleFormatter;
+use StusDevKit\DateTimeKit\Tests\Unit\Fixtures\StubSingleTransformer;
 use StusDevKit\DateTimeKit\When;
 
 #[TestDox('Now')]
@@ -252,6 +255,121 @@ class NowTest extends TestCase
 
         $this->assertSame(
             '2025-06-15T10:30:00+00:00',
+            $result,
+        );
+    }
+
+    // ----------------------------------------------------------------
+    // formatWith()
+
+    #[TestDox('::formatWith() returns an instance of the given formatter class')]
+    public function test_formatWith_returns_formatter_instance(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that formatWith() instantiates the given
+        // formatter class using the cached Now datetime
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        Now::setTestClock('2025-06-15 10:30:00+00:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = Now::formatWith(StubGroupFormatter::class);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(StubGroupFormatter::class, $result);
+    }
+
+    #[TestDox('::formatWith() uses the cached Now datetime')]
+    public function test_formatWith_uses_cached_now_datetime(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that formatWith() passes the cached Now
+        // datetime to the formatter
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        Now::setTestClock('2025-06-15 10:30:00+00:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = Now::formatWith(StubGroupFormatter::class)->date();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertSame('2025-06-15', $result);
+    }
+
+    // ----------------------------------------------------------------
+    // formatUsing()
+
+    #[TestDox('::formatUsing() returns the formatted string from the given formatter')]
+    public function test_formatUsing_returns_formatted_string(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that formatUsing() passes the cached Now
+        // datetime to the formatter and returns the resulting string
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        Now::setTestClock('2025-06-15 10:30:00+00:00');
+        $formatter = new StubSingleFormatter();
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = Now::formatUsing($formatter);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertSame('2025-06-15 10:30:00', $result);
+    }
+
+    // ----------------------------------------------------------------
+    // transformUsing()
+
+    #[TestDox('::transformUsing() returns the transformed value from the given transformer')]
+    public function test_transformUsing_returns_transformed_value(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that transformUsing() passes the cached
+        // Now datetime to the transformer and returns the result,
+        // which can be any type (not just string)
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        Now::setTestClock('2025-06-15 10:30:00+00:00');
+        $transformer = new StubSingleTransformer();
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = Now::transformUsing($transformer);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertSame(
+            ['year' => 2025, 'month' => 6, 'day' => 15],
             $result,
         );
     }

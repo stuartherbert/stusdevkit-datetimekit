@@ -44,7 +44,11 @@ namespace StusDevKit\DateTimeKit;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
+use NoDiscard;
 use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
+use StusDevKit\DateTimeKit\Formatters\WhenGroupFormatterInterface;
+use StusDevKit\DateTimeKit\Formatters\WhenSingleFormatterInterface;
+use StusDevKit\DateTimeKit\Formatters\WhenSingleTransformerInterface;
 
 /**
  * Represents the current datetime in your app.
@@ -116,6 +120,57 @@ class Now
     public static function asFormat(): WhenFormatter
     {
         return static::$cachedDateTime->asFormat();
+    }
+
+    /**
+     * Returns a custom group formatter for the current
+     * datetime.
+     *
+     * Usage:
+     *
+     *     Now::formatWith(MyFormatter::class)->myMethod();
+     *
+     * @template T of WhenGroupFormatterInterface
+     * @param class-string<T> $formatterClass
+     * @return T
+     */
+    #[NoDiscard]
+    public static function formatWith(string $formatterClass): object
+    {
+        return static::$cachedDateTime->formatWith($formatterClass);
+    }
+
+    /**
+     * Formats the current datetime using an existing
+     * formatter instance.
+     *
+     * Usage:
+     *
+     *     Now::formatUsing($myFormatter);
+     */
+    #[NoDiscard]
+    public static function formatUsing(
+        WhenSingleFormatterInterface $formatter,
+    ): string {
+        return static::$cachedDateTime->formatUsing($formatter);
+    }
+
+    /**
+     * Transforms the current datetime using an existing
+     * transformer instance.
+     *
+     * Unlike `formatUsing()` (which returns `string`), this
+     * method can return any type.
+     *
+     * Usage:
+     *
+     *     Now::transformUsing($myTransformer);
+     */
+    #[NoDiscard]
+    public static function transformUsing(
+        WhenSingleTransformerInterface $transformer,
+    ): mixed {
+        return static::$cachedDateTime->transformUsing($transformer);
     }
 
     /**

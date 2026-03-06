@@ -53,6 +53,9 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use StusDevKit\DateTimeKit\When;
 use StusDevKit\DateTimeKit\Formatters\WhenFormatter;
+use StusDevKit\DateTimeKit\Tests\Unit\Fixtures\StubGroupFormatter;
+use StusDevKit\DateTimeKit\Tests\Unit\Fixtures\StubSingleFormatter;
+use StusDevKit\DateTimeKit\Tests\Unit\Fixtures\StubSingleTransformer;
 
 #[TestDox('When')]
 class WhenTest extends TestCase
@@ -523,6 +526,146 @@ class WhenTest extends TestCase
         // test the results
 
         $this->assertInstanceOf(WhenFormatter::class, $result);
+    }
+
+    // ----------------------------------------------------------------
+    // formatWith()
+
+    #[TestDox('->formatWith() returns an instance of the given formatter class')]
+    public function test_formatWith_returns_formatter_instance(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that formatWith() instantiates the given
+        // formatter class and returns the typed instance
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new When('2025-06-15 10:30:45+00:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = $unit->formatWith(StubGroupFormatter::class);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(StubGroupFormatter::class, $result);
+    }
+
+    #[TestDox('->formatWith() formatter methods return correct values')]
+    public function test_formatWith_formatter_methods_return_correct_values(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that the formatter returned by formatWith()
+        // has access to the When instance and produces correct output
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new When('2025-06-15 10:30:45+00:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $date = $unit->formatWith(StubGroupFormatter::class)->date();
+        $time = $unit->formatWith(StubGroupFormatter::class)->time();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertSame('2025-06-15', $date);
+        $this->assertSame('10:30:45', $time);
+    }
+
+    #[TestDox('->formatWith() throws if the class does not implement WhenGroupFormatterInterface')]
+    public function test_formatWith_throws_for_invalid_class(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that formatWith() throws an
+        // InvalidArgumentException when given a class that does
+        // not implement WhenGroupFormatterInterface
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new When('2025-06-15 10:30:45+00:00');
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $this->expectException(InvalidArgumentException::class);
+        /** @phpstan-ignore argument.type, argument.templateType */
+        $_ = $unit->formatWith(\stdClass::class);
+    }
+
+    // ----------------------------------------------------------------
+    // formatUsing()
+
+    #[TestDox('->formatUsing() returns the formatted string from the given formatter')]
+    public function test_formatUsing_returns_formatted_string(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that formatUsing() passes the When instance
+        // to the formatter and returns the resulting string
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new When('2025-06-15 10:30:45+00:00');
+        $formatter = new StubSingleFormatter();
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = $unit->formatUsing($formatter);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertSame('2025-06-15 10:30:45', $result);
+    }
+
+    // ----------------------------------------------------------------
+    // transformUsing()
+
+    #[TestDox('->transformUsing() returns the transformed value from the given transformer')]
+    public function test_transformUsing_returns_transformed_value(): void
+    {
+        // ----------------------------------------------------------------
+        // explain your test
+
+        // this test proves that transformUsing() passes the When
+        // instance to the transformer and returns the result,
+        // which can be any type (not just string)
+
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new When('2025-06-15 10:30:45+00:00');
+        $transformer = new StubSingleTransformer();
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $result = $unit->transformUsing($transformer);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertSame(
+            ['year' => 2025, 'month' => 6, 'day' => 15],
+            $result,
+        );
     }
 
     #[TestDox('->asMicrotime() returns a float representation')]

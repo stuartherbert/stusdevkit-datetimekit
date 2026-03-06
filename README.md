@@ -118,6 +118,101 @@ $when->asFormat()->database()->postgres();  // "2026-03-05T14:30:00+00:00"
 $when->asFormat()->http()->rfc9110();  // "Thu, 05 Mar 2026 14:30:00 GMT"
 ```
 
+### Custom Formatters
+
+You can extend DateTimeKit with your own formatters using `formatWith()` and `formatUsing()`.
+
+#### Group Formatters (`formatWith`)
+
+Create a class that implements `WhenGroupFormatterInterface` to provide multiple related format methods. Pass the class name to `formatWith()` to get a fully-typed instance with IDE autocomplete.
+
+```php
+use StusDevKit\DateTimeKit\Formatters\WhenGroupFormatterInterface;
+use StusDevKit\DateTimeKit\When;
+
+class WhenSlackFormatter implements WhenGroupFormatterInterface
+{
+    public function __construct(
+        private readonly When $when,
+    ) {
+    }
+
+    public function timestamp(): string
+    {
+        return $this->when->format('U') . '.000000';
+    }
+
+    public function threadId(): string
+    {
+        return $this->when->format('U.u');
+    }
+}
+
+// usage
+$when->formatWith(WhenSlackFormatter::class)->timestamp();
+$when->formatWith(WhenSlackFormatter::class)->threadId();
+
+// also works with Now
+Now::formatWith(WhenSlackFormatter::class)->timestamp();
+```
+
+#### Single Formatters (`formatUsing`)
+
+Create a class that implements `WhenSingleFormatterInterface` when you have an existing object that needs to format a `When`. Pass the instance to `formatUsing()` to get the formatted string directly.
+
+```php
+use StusDevKit\DateTimeKit\Formatters\WhenSingleFormatterInterface;
+use StusDevKit\DateTimeKit\When;
+
+class MyLogFormatter implements WhenSingleFormatterInterface
+{
+    public function formatWhen(When $when): string
+    {
+        return $when->format('Y-m-d H:i:s.v');
+    }
+}
+
+// usage
+$formatter = new MyLogFormatter();
+$when->formatUsing($formatter);
+
+// also works with Now
+Now::formatUsing($formatter);
+```
+
+A class can implement both interfaces if it needs to support both calling styles.
+
+#### Single Transformers (`transformUsing`)
+
+Create a class that implements `WhenSingleTransformerInterface` when you need to convert a `When` into something other than a string (e.g. an array, an int, or a domain object).
+
+```php
+use StusDevKit\DateTimeKit\Formatters\WhenSingleTransformerInterface;
+use StusDevKit\DateTimeKit\When;
+
+class WhenToArrayTransformer implements WhenSingleTransformerInterface
+{
+    /**
+     * @return array{year: int, month: int, day: int}
+     */
+    public function transformWhen(When $when): array
+    {
+        return [
+            'year' => $when->getYear(),
+            'month' => $when->getMonthOfYear(),
+            'day' => $when->getDayOfMonth(),
+        ];
+    }
+}
+
+// usage
+$transformer = new WhenToArrayTransformer();
+$when->transformUsing($transformer);
+
+// also works with Now
+Now::transformUsing($transformer);
+```
+
 ### Using `Now` in Your Application
 
 ```php

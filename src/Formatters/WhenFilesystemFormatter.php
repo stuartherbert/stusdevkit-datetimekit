@@ -57,7 +57,7 @@ use StusDevKit\DateTimeKit\When;
  *     $when->asFormat()->filesystem()->dateTime();
  *     $when->asFormat()->filesystem()->dateTimeAndMilliseconds();
  */
-class WhenFilesystemFormatter
+class WhenFilesystemFormatter implements WhenGroupFormatterInterface
 {
     public function __construct(
         private readonly When $when,
